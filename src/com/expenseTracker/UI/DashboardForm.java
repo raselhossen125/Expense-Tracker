@@ -76,10 +76,8 @@ public class DashboardForm extends JFrame {
         reportButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Action to show the report, implement your report logic here
-                JOptionPane.showMessageDialog(DashboardForm.this,
-                        "Report generation logic goes here.",
-                        "Generate Report", JOptionPane.INFORMATION_MESSAGE);
+                new ReportForm().setVisible(true);
+                dispose();
             }
         });
 

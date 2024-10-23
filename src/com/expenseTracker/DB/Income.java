@@ -59,4 +59,36 @@ public class Income {
             stmt.executeUpdate();
         }
     }
+
+    public static double getTotalIncome(String query) throws SQLException {
+        double totalIncome = 0;
+        try (Connection conn = DatabaseConnection.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                totalIncome = rs.getDouble("total_income");
+            }
+        }
+        return totalIncome;
+    }
+
+    public static double getDailyTotalIncome() throws SQLException {
+        String query = "SELECT SUM(amount) AS total_income FROM income WHERE DATE(date) = CURDATE();";
+        return getTotalIncome(query);
+    }
+
+    public static double getWeeklyTotalIncome() throws SQLException {
+        String query = "SELECT SUM(amount) AS total_income FROM income WHERE YEARWEEK(date, 1) = YEARWEEK(CURDATE(), 1);";
+        return getTotalIncome(query);
+    }
+
+    public static double getMonthlyTotalIncome() throws SQLException {
+        String query = "SELECT SUM(amount) AS total_income FROM income WHERE YEAR(date) = YEAR(CURDATE()) AND MONTH(date) = MONTH(CURDATE());";
+        return getTotalIncome(query);
+    }
+
+    public static double getYearlyTotalIncome() throws SQLException {
+        String query = "SELECT SUM(amount) AS total_income FROM income WHERE YEAR(date) = YEAR(CURDATE());";
+        return getTotalIncome(query);
+    }
 }
